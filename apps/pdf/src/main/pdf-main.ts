@@ -1471,7 +1471,7 @@ export function startPdfStandalone(): void {
     rendererFile: join(__dirname, '../renderer/index.html'),
     createDocument: createStandaloneDocument,
   })
-  void app.whenReady().then(() => {
+  void app.whenReady().then(async () => {
     registerPdfIpc()
     const win = new BrowserWindow({
       width: 1200,
