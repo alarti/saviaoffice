@@ -28,10 +28,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build PDF App (Windows Installer)
+      - name: Build PDF App (Vite)
+        run: npm --workspace=apps/pdf run build
+
+      - name: Package Windows Installer (.exe)
+        shell: bash
         run: |
-          npm --workspace=apps/pdf run build
-          npx electron-builder --win --x64 -c.electronVersion="34.3.0" --project apps/pdf
+          ELECTRON_VER=$(node -p "require('./node_modules/electron/package.json').version")
+          echo "Detected exact Electron version: $ELECTRON_VER"
+          npx electron-builder --win --x64 -c.electronVersion="$ELECTRON_VER" --project apps/pdf
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
