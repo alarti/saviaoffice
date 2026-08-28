@@ -31,7 +31,7 @@ jobs:
       - name: Build PDF App (Windows Installer)
         run: |
           npm --workspace=apps/pdf run build
-          npx --workspace=apps/pdf electron-builder --win --x64
+          npx electron-builder --win --x64 -c.electronVersion="34.3.0" --project apps/pdf
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
