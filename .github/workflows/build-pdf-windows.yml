@@ -19,24 +19,19 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 9
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'pnpm'
+          node-version: 22
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
       - name: Build PDF App (Windows Installer)
         run: |
-          pnpm --filter ./apps/pdf build
-          pnpm --filter ./apps/pdf exec electron-builder --win --x64
+          npm --workspace=apps/pdf run build
+          npx --workspace=apps/pdf electron-builder --win --x64
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
