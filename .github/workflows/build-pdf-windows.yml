@@ -37,7 +37,7 @@ jobs:
         run: |
           ELECTRON_VER=$(node -p "require('./node_modules/electron/package.json').version")
           echo "Detected exact Electron version: $ELECTRON_VER"
-          npx electron-builder --win --x64 --publish never --config apps/pdf/electron-builder.ci.yml -c.electronVersion="$ELECTRON_VER" --project apps/pdf
+          npx electron-builder --win --x64 --publish never --projectDir apps/pdf --config electron-builder.ci.yml -c.electronVersion="$ELECTRON_VER"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
