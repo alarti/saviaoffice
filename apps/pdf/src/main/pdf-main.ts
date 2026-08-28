@@ -1483,8 +1483,29 @@ export function startPdfStandalone(): void {
         sandbox: true,
       },
     })
-    const argPath = process.argv.slice(1).find((a) => /\.pdf$/i.test(a) && existsSync(a))
-    grantAndTrack(win.webContents, argPath)
+/** Parche alarti apertura pdf only */
+//    const argPath = process.argv.slice(1).find((a) => /\.pdf$/i.test(a) && existsSync(a))
+//    grantAndTrack(win.webContents, argPath)
+const argPath = process.argv.slice(1).find((a) => /\.pdf$/i.test(a) && existsSync(a))
+
+// SaviaOffice PDF fork: show the native file picker only when the application
+// starts without a PDF passed by Windows (shortcut launch). A file supplied by
+// file association or “Open with…” always has priority.
+let openPath = argPath
+
+if (!openPath) {
+  const picked = await showOpenDialogWithMemory(dialog, win, {
+    title: 'Abrir documento PDF',
+    filters: [{ name: tm('filterPdf'), extensions: ['pdf'] }],
+    properties: ['openFile'],
+  })
+  openPath = picked.canceled ? undefined : picked.filePaths[0]
+}
+
+grantAndTrack(win.webContents, openPath)
+
+/**Fin parche */
+
     if (runtime.rendererUrl) void win.loadURL(runtime.rendererUrl)
     else if (runtime.rendererFile) void win.loadFile(runtime.rendererFile)
   })
