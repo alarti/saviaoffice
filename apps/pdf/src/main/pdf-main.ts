@@ -12,6 +12,10 @@ import { readFile, writeFile } from 'node:fs/promises'
 import { userInfo } from 'node:os'
 import { basename, dirname, join } from 'node:path'
 import { BrowserWindow, WebContentsView, app, dialog, ipcMain, shell } from 'electron'
+import { createI18n } from '@genoffice/i18n'
+import type { Lang } from '@genoffice/i18n'
+
+const SAVIAOFFICE_DEFAULT_LANGUAGE: Lang = 'es'
 import type { WebContents } from 'electron'
 import {
   buildPrintableHtml,
@@ -23,7 +27,10 @@ import {
   safeExternalUrl,
   showOpenDialogWithMemory,
 } from '@genoffice/electron-utils'
-import { createI18n, getUiLang } from '@genoffice/i18n'
+
+import { createI18n } from '@genoffice/i18n'
+import type { Lang } from '@genoffice/i18n'
+
 import { gskGenerateImage, hasGskAuth } from '@genoffice/ai-search'
 import { cloudToolsEnabled, type AiSettings } from '@genoffice/ai-provider'
 import { PDF_CHANNELS } from '../shared/ipc'
@@ -425,7 +432,7 @@ type DlgKey =
   | 'btnSave'
   | 'btnDontSave'
   | 'btnCancel'
-const tm = (key: DlgKey) => tDlg(getUiLang(), key)
+const tm = (key: DlgKey) => tDlg(SAVIAOFFICE_DEFAULT_LANGUAGE, key)
 
 interface RuntimePaths {
   preloadPath: string
@@ -1464,7 +1471,7 @@ export function createPdfView(openPath?: string | null): WebContentsView {
 /** Standalone window mode: `npm run dev -w @genoffice/pdf`, pdf path passed via argv */
 export function startPdfStandalone(): void {
   installNavigationGuard(app)
-  installContextMenu(app, () => contextMenuLabels(getUiLang()))
+  installContextMenu(app, () => contextMenuLabels(SAVIAOFFICE_DEFAULT_LANGUAGE))
   configurePdfRuntime({
     preloadPath: join(__dirname, '../preload/index.js'),
     rendererUrl: process.env.ELECTRON_RENDERER_URL,
