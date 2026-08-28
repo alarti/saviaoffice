@@ -1,0 +1,25 @@
+# Configuración exclusiva del empaquetado CI de SaviaOffice PDF.
+# Fork maintainer: Alberto Arce Rodríguez (https://github.com/alarti)
+# Basado en GenOffice; se mantienen LICENSE y NOTICE conforme a Apache-2.0.
+
+appId: com.saviaoffice.pdf
+productName: SaviaOffice PDF
+copyright: Copyright © 2026 Alberto Arce Rodríguez
+
+# Build de artefactos únicamente: no publicar ni crear metadatos de auto-update.
+publish: null
+
+directories:
+  output: dist
+
+win:
+  target:
+    - nsis
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+
+artifactName: ${productName} Setup ${version}.${ext}
